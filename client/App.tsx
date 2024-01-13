@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import FeedList from "./components/FeedList";
+import { Box } from "@mui/material";
 
 function App() {
   const [feedData, setFeedData] = useState([]);
@@ -9,7 +10,7 @@ function App() {
     fetch("http://localhost:4000/feed")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("data :", data);
 
         setFeedData(data);
       });
@@ -17,7 +18,9 @@ function App() {
 
   return (
     <div className="App">
-      <FeedList data={feedData} />
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <FeedList data={feedData} />
+      </Box>
     </div>
   );
 }

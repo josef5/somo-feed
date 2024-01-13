@@ -1,15 +1,8 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import {
-  Avatar,
-  CardHeader,
-  CardMedia,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import { red } from "@mui/material/colors";
+// import CardContent from "@mui/material/CardContent";
+import { Avatar, CardHeader, CardMedia, Typography } from "@mui/material";
 
 interface FeedItem {
   briefref: string;
@@ -29,37 +22,40 @@ interface FeedItem {
 
 const FeedList: React.FunctionComponent<{ data: FeedItem[] }> = (props) => {
   const { data } = props;
-  console.log("data :", data);
+  // console.log("data :", data);
 
   return (
     <>
-      {/* <Button variant="outlined">Hello world</Button>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-            </IconButton>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
-        <CardMedia
-          component="img"
-          height="194"
-          image="http://localhost:4000/images/audi-banner.jpeg"
-          alt="Paella dish"
-        />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary"></Typography>
-        </CardContent>
-      </Card> */}
-      {data.map((item) => (
-        <pre key={item.briefref}>{JSON.stringify(item, null, 2)}</pre>
+      {data.map((item, index) => (
+        <Card sx={{ width: 345, position: "relative" }} key={index}>
+          <CardHeader
+            avatar={<Avatar src={item.brand.logo} aria-label="logo"></Avatar>}
+            action={<Button>Join brief now</Button>}
+            title={item.brand.name}
+          />
+          <CardMedia
+            component="img"
+            height="194"
+            image={item.banner_image}
+            alt={item.feed_title}
+          />
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              textShadow:
+                "1px 1px 2px rgba(0, 0, 0, 1), 1px 1px 4px rgba(0, 0, 0, 1)",
+              color: "white",
+              padding: "8px",
+            }}
+          >
+            {item.feed_title}
+          </Typography>
+          {/* <pre>{JSON.stringify(item, null, 2)}</pre> */}
+        </Card>
       ))}
     </>
   );
