@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import FeedList from "./components/FeedList";
-import { Box } from "@mui/material";
+import { Box, Drawer, Modal as MuiModal, Typography } from "@mui/material";
+import { ModalProvider, useModal } from "./components/ModalContext";
+import Modal from "./components/Modal";
+import { FeedItem } from "./types";
 
 function App() {
-  const [feedData, setFeedData] = useState([]);
+  const [feedData, setFeedData] = useState<FeedItem[]>([]);
+
+  const { openModal } = useModal();
 
   useEffect(() => {
     fetch("http://localhost:4000/feed")
@@ -16,12 +21,22 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    if (feedData) {
+      // const [feedItem] = feedData;
+      openModal({ feedItem: feedData[5] });
+    }
+  }, [feedData]);
+
   return (
-    <div className="App">
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <FeedList data={feedData} />
-      </Box>
-    </div>
+    <>
+      <div className="App">
+        <Modal />
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <FeedList data={feedData} />
+        </Box>
+      </div>
+    </>
   );
 }
 
