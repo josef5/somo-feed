@@ -72,7 +72,7 @@ const Modal = () => {
                 flexDirection: "column",
                 backgroundColor: "black",
                 overflowY: "scroll",
-                // gap: 20,
+                flex: "100%",
               }}
             >
               <Card
@@ -104,6 +104,7 @@ const Modal = () => {
                   alignItems: "center",
                   height: "100vh",
                   flex: "1 1 auto",
+                  borderRadius: 0,
                 }}
               >
                 <Box
@@ -171,6 +172,7 @@ const Modal = () => {
                 "& .MuiDrawer-paper": {
                   width: drawerWidth,
                   boxSizing: "border-box",
+                  backgroundColor: "hsl(0, 0%, 95%)",
                 },
               }}
               variant="permanent"
@@ -181,12 +183,15 @@ const Modal = () => {
                   <Avatar src={item.brand.logo} aria-label="logo"></Avatar>
                 }
                 title={item.brand.name}
+                sx={{ backgroundColor: "white" }}
               />
-              {/* <pre>{JSON.stringify(item, null, 2)}</pre> */}
-              {/* <pre>{JSON.stringify(comments, null, 2)}</pre> */}
               {comments &&
                 comments.map((comment, index) => (
-                  <Card key={index}>
+                  <Card
+                    key={index}
+                    sx={{ backgroundColor: "transparent" }}
+                    elevation={0}
+                  >
                     <CardContent>
                       <Avatar src={comment.user.avatar} />
                       <Typography variant="h6">{comment.user.name}</Typography>
