@@ -59,6 +59,7 @@ const Modal = () => {
                 flexDirection: "column",
                 backgroundColor: "black",
                 overflowY: "scroll",
+                // gap: 20,
               }}
             >
               <Card
@@ -84,14 +85,69 @@ const Modal = () => {
               <Card
                 sx={{
                   display: "flex",
+                  flexDirection: "column",
                   flexShrink: 0,
+                  justifyContent: "flex-start",
+                  alignItems: "center",
                   height: "100vh",
                   flex: "1 1 auto",
                 }}
               >
-                <Typography>
-                  <pre>{JSON.stringify(item, null, 2)}</pre>
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    flex: 0,
+                    alignItems: "center",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      objectFit: "contain",
+                      width: "60px",
+                      margin: "20px",
+                    }}
+                    image={item.brand.logo}
+                  />
+                  <Typography variant="h6" gutterBottom>
+                    {item.feed_title}
+                  </Typography>
+                  <Typography variant="subtitle2" gutterBottom>
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    {item.banner_text}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    maxHeight: "100%",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      objectFit: "contain",
+                      flex: "1 1 auto",
+                      maxHeight: "50%",
+                      maxWidth: "auto",
+                    }}
+                    image={item.ad_1_image}
+                  />
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      height: "100%",
+                      objectFit: "contain",
+                      flex: "1 1 auto",
+                      maxHeight: "50%",
+                      maxWidth: "auto",
+                    }}
+                    image={item.ad_2_image}
+                  />
+                </Box>
               </Card>
             </Box>
             <Drawer
