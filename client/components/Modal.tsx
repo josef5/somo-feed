@@ -22,6 +22,19 @@ const Modal = () => {
   const { modalData, closeModal, openModal } = useModal();
   const { feedItem: item } = modalData ?? { feedItem: {} as FeedItem };
 
+  let briefStartDate, formattedDate;
+
+  if (item?.starts_on) {
+    briefStartDate = new Date(item?.starts_on);
+    formattedDate =
+      briefStartDate &&
+      briefStartDate.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+  }
+
   useEffect(() => {
     if (item?.briefref) {
       fetch(`http://localhost:4000/comments/${item.briefref}`)
@@ -114,6 +127,7 @@ const Modal = () => {
                     {item.feed_title}
                   </Typography>
                   <Typography variant="subtitle2" gutterBottom>
+                    {formattedDate}
                   </Typography>
                   <Typography variant="body1" gutterBottom>
                     {item.banner_text}
@@ -168,7 +182,7 @@ const Modal = () => {
                 }
                 title={item.brand.name}
               />
-              <pre>{JSON.stringify(item, null, 2)}</pre>
+              {/* <pre>{JSON.stringify(item, null, 2)}</pre> */}
               {/* <pre>{JSON.stringify(comments, null, 2)}</pre> */}
               {comments &&
                 comments.map((comment, index) => (
