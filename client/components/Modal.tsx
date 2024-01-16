@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Box,
@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardMedia,
   Drawer,
-  Grid,
   Modal as MuiModal,
   Typography,
 } from "@mui/material";
@@ -19,7 +18,8 @@ const drawerWidth = 500;
 
 const Modal = () => {
   const [comments, setComments] = useState<Comment[]>();
-  const { modalData, closeModal, openModal } = useModal();
+  const [arrowButtonDisabled, setArrowButtonDisabled] = useState("up");
+  const { modalData, closeModal } = useModal();
   const { feedItem: item } = modalData ?? { feedItem: {} as FeedItem };
 
   let briefStartDate, formattedDate;
@@ -34,6 +34,26 @@ const Modal = () => {
         year: "numeric",
       });
   }
+
+  const scrollContainer = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: string) => {
+    const directionMultiplier = direction === "up" ? -1 : 1;
+    const windowHeight = window.innerHeight;
+    console.log("scroll :", windowHeight * directionMultiplier);
+
+    setTimeout(() => {
+      setArrowButtonDisabled(direction);
+    }, 800);
+
+    if (scrollContainer.current) {
+      console.log("scrollContainer :", scrollContainer);
+      scrollContainer.current.scrollBy({
+        top: windowHeight * directionMultiplier,
+        behavior: "smooth",
+      });
+    }
+  };
 
   useEffect(() => {
     if (item?.briefref) {
@@ -58,12 +78,33 @@ const Modal = () => {
             position: "absolute",
             overflowY: "scroll",
           }}
+          ref={scrollContainer}
         >
           <Box
             sx={{
               display: "flex",
             }}
           >
+            <Button
+              onClick={() => {
+                closeModal();
+                setArrowButtonDisabled("up");
+              }}
+              sx={{
+                position: "fixed",
+                top: "1rem",
+                left: "1rem",
+                padding: 0,
+                minWidth: "auto",
+              }}
+            >
+              <Box
+                component="img"
+                src="/close-dialog.svg"
+                alt=""
+                sx={{ width: "2rem" }}
+              />
+            </Button>
             <Box
               // className="LEFT-BOX"
               sx={{
@@ -71,10 +112,64 @@ const Modal = () => {
                 justifyContent: "center",
                 flexDirection: "column",
                 backgroundColor: "black",
-                overflowY: "scroll",
                 flex: "100%",
               }}
             >
+              <Box
+                sx={{
+                  position: "fixed",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  right: "510px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Button
+                  onClick={() => scroll("up")}
+                  sx={{
+                    padding: 0,
+                    minWidth: "auto",
+                    marginBottom: "1rem",
+                  }}
+                  disabled={arrowButtonDisabled === "up"}
+                >
+                  <Box
+                    component="img"
+                    src="/switch-down.svg"
+                    alt=""
+                    sx={{
+                      width: "2rem",
+                      transform: "scaleY(-1)",
+                      filter:
+                        arrowButtonDisabled === "up"
+                          ? "invert(95%) sepia(0%) saturate(0%) hue-rotate(207deg) brightness(200%) contrast(20%)"
+                          : "none",
+                    }}
+                  />
+                </Button>
+                <Button
+                  onClick={() => scroll("down")}
+                  sx={{
+                    padding: 0,
+                    minWidth: "auto",
+                  }}
+                  disabled={arrowButtonDisabled === "down"}
+                >
+                  <Box
+                    component="img"
+                    src="/switch-down.svg"
+                    alt=""
+                    sx={{
+                      width: "2rem",
+                      filter:
+                        arrowButtonDisabled === "down"
+                          ? "invert(95%) sepia(0%) saturate(0%) hue-rotate(207deg) brightness(200%) contrast(20%)"
+                          : "none",
+                    }}
+                  />
+                </Button>
+              </Box>
               <Card
                 // className="IMAGE-CONTAINER"
                 sx={{
@@ -106,6 +201,7 @@ const Modal = () => {
                   flex: "1 1 auto",
                   borderRadius: 0,
                 }}
+                elevation={0}
               >
                 <Box
                   sx={{
@@ -173,6 +269,7 @@ const Modal = () => {
                   width: drawerWidth,
                   boxSizing: "border-box",
                   backgroundColor: "hsl(0, 0%, 95%)",
+                  border: "none",
                 },
               }}
               variant="permanent"
