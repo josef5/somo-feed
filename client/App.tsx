@@ -8,15 +8,36 @@ import { FeedItem } from "./types";
 function App() {
   const [feedData, setFeedData] = useState<FeedItem[]>([]);
 
-  useEffect(() => {
-    fetch("http://localhost:4000/feed")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data :", data);
+  const fetchData = () => {
+    return fetch(
+      `http://localhost:4000/feed?START=${feedData.length}&PAGE_SIZE=${5}`
+    ).then((response) => response.json());
+  };
 
-        setFeedData(data);
-      });
-  }, []);
+  useEffect(() => {
+    function handleScroll() {
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        fetchData().then((data) => {
+          setFeedData((d) => [...d, ...data]);
+        });
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [feedData]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    fetchData().then((data) => {
+      setFeedData(data);
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
