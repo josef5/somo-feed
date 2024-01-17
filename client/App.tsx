@@ -4,6 +4,7 @@ import FeedList from "./components/FeedList";
 import { Box } from "@mui/material";
 import Modal from "./components/Modal";
 import { FeedItem } from "./types";
+import { ModalProvider } from "./components/ModalContext";
 
 function App() {
   const [feedData, setFeedData] = useState<FeedItem[]>([]);
@@ -60,10 +61,12 @@ function App() {
   return (
     <>
       <div className="App">
-        <Modal />
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <FeedList data={feedData} />
-        </Box>
+        <ModalProvider>
+          <Modal />
+          <Box display="flex" flexDirection="column" alignItems="center">
+            <FeedList data={feedData} />
+          </Box>
+        </ModalProvider>
       </div>
     </>
   );
