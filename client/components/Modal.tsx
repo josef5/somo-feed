@@ -23,9 +23,10 @@ const Modal = () => {
   );
   const { modalData, closeModal } = useModal();
   const { feedItem: item } = modalData ?? { feedItem: {} as FeedItem };
-
+  const scrollContainer = useRef<HTMLDivElement>(null);
   let briefStartDate, formattedDate;
 
+  // Format the date
   if (item?.starts_on) {
     briefStartDate = new Date(item?.starts_on);
     formattedDate =
@@ -37,14 +38,21 @@ const Modal = () => {
       });
   }
 
-  const scrollContainer = useRef<HTMLDivElement>(null);
-
+  /**
+   * This function is used to scroll the modal content up or down.
+   * It takes a direction (up or down) as an argument.
+   * The directionMultiplier is set to -1 for up and 1 for down.
+   * The windowHeight is the height of the viewport.
+   * The function then scrolls the modal content by the height of the viewport in the specified direction.
+   * The scroll is smooth and the arrow button is disabled during the scroll.
+   * @param direction - The direction to scroll. Can be up or down.
+   */
   const scroll = (direction: ScrollDirection) => {
     const directionMultiplier = direction === ScrollDirection.UP ? -1 : 1;
     const windowHeight = window.innerHeight;
 
     setTimeout(() => {
-      // NB. This is linked to the disabled state of the arrow buttons.
+      // NB. This value is linked to the disabled state of the arrow buttons.
       // Setting this during auto-scroll will cause a re-render which interferes
       // with the scroll animation
       setArrowButtonDisabled(direction);
@@ -58,6 +66,13 @@ const Modal = () => {
     }
   };
 
+  /**
+   * This useEffect hook is used to fetch comments for a specific brief.
+   * It runs whenever the briefref of the item changes.
+   * If the item has a briefref, it fetches comments from the server.
+   * The server is expected to return a JSON array of Comment objects.
+   * The fetched comments are then set to the comments state.
+   */
   useEffect(() => {
     if (item?.briefref) {
       fetch(`http://localhost:4000/comments/${item.briefref}`)

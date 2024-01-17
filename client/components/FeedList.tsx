@@ -20,6 +20,13 @@ interface FeedItem {
   starts_on: string;
 }
 
+/**
+ * FeedList is a functional component that takes an array of FeedItem objects as props.
+ * It uses the ModalContext to provide a modal that can be opened with a FeedItem.
+ * Each FeedItem is displayed in a Card component from the Material UI library.
+ * The Card displays the brand logo, brand name, and a button to join the brief.
+ * Clicking on the button or the banner image opens the modal with the corresponding FeedItem.
+ */
 const FeedList: React.FunctionComponent<{ data: FeedItem[] }> = (props) => {
   const { data } = props;
   const { openModal } = useModal();
