@@ -33,13 +33,28 @@ const FeedList: React.FunctionComponent<{ data: FeedItem[] }> = (props) => {
           key={index}
         >
           <CardHeader
-            avatar={<Avatar src={item.brand.logo} aria-label="logo"></Avatar>}
+            avatar={
+              <Box
+                component="img"
+                src={item.brand.logo}
+                aria-label="logo"
+                height={40}
+                width={40}
+                sx={{ objectFit: "contain" /* backgroundColor: "gray" */ }}
+                marginLeft={"10px"}
+              ></Box>
+            }
             action={
-              <Button onClick={() => openModal({ feedItem: item })}>
+              <Button
+                onClick={() => openModal({ feedItem: item })}
+                sx={{ margin: "10px 8px" }}
+              >
                 Join brief now
               </Button>
             }
             title={item.brand.name}
+            titleTypographyProps={{ fontSize: 16, fontWeight: "bold" }}
+            sx={{ padding: "4px", height: "50px" }}
           />
           <Box
             onClick={() => openModal({ feedItem: item })}
