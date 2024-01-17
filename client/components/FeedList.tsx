@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import { Avatar, Box, CardHeader, CardMedia, Typography } from "@mui/material";
+import { Box, CardHeader, CardMedia, Typography } from "@mui/material";
 import { useModal } from "./ModalContext";
 
 interface FeedItem {
@@ -27,11 +27,7 @@ const FeedList: React.FunctionComponent<{ data: FeedItem[] }> = (props) => {
   return (
     <>
       {data.map((item, index) => (
-        <Card
-          // onClick={() => openModal({ feedItem: item })}
-          sx={{ width: 345, position: "relative" }}
-          key={index}
-        >
+        <Card sx={{ width: 345, position: "relative" }} key={index}>
           <CardHeader
             avatar={
               <Box
@@ -40,7 +36,7 @@ const FeedList: React.FunctionComponent<{ data: FeedItem[] }> = (props) => {
                 aria-label="logo"
                 height={40}
                 width={40}
-                sx={{ objectFit: "contain" /* backgroundColor: "gray" */ }}
+                sx={{ objectFit: "contain" }}
                 marginLeft={"10px"}
               ></Box>
             }
@@ -62,7 +58,7 @@ const FeedList: React.FunctionComponent<{ data: FeedItem[] }> = (props) => {
           >
             <CardMedia
               component="img"
-              height="200"
+              height="250"
               image={item.banner_image}
               alt={item.feed_title}
             />
