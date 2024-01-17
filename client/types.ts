@@ -29,3 +29,8 @@ export interface Comment {
   comment: string;
   submitted_on: string;
 }
+
+export enum ScrollDirection {
+  UP = "up",
+  DOWN = "down",
+}

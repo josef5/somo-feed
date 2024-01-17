@@ -12,13 +12,15 @@ import {
   Typography,
 } from "@mui/material";
 import { useModal } from "./ModalContext";
-import { FeedItem, Comment } from "../types";
+import { FeedItem, Comment, ScrollDirection } from "../types";
 
 const drawerWidth = 500;
 
 const Modal = () => {
   const [comments, setComments] = useState<Comment[]>();
-  const [arrowButtonDisabled, setArrowButtonDisabled] = useState("up");
+  const [arrowButtonDisabled, setArrowButtonDisabled] = useState(
+    ScrollDirection.UP
+  );
   const { modalData, closeModal } = useModal();
   const { feedItem: item } = modalData ?? { feedItem: {} as FeedItem };
 
@@ -37,17 +39,18 @@ const Modal = () => {
 
   const scrollContainer = useRef<HTMLDivElement>(null);
 
-  const scroll = (direction: string) => {
-    const directionMultiplier = direction === "up" ? -1 : 1;
+  const scroll = (direction: ScrollDirection) => {
+    const directionMultiplier = direction === ScrollDirection.UP ? -1 : 1;
     const windowHeight = window.innerHeight;
-    console.log("scroll :", windowHeight * directionMultiplier);
 
     setTimeout(() => {
+      // NB. This is linked to the disabled state of the arrow buttons.
+      // Setting this during auto-scroll will cause a re-render which interferes
+      // with the scroll animation
       setArrowButtonDisabled(direction);
     }, 800);
 
     if (scrollContainer.current) {
-      console.log("scrollContainer :", scrollContainer);
       scrollContainer.current.scrollBy({
         top: windowHeight * directionMultiplier,
         behavior: "smooth",
@@ -88,7 +91,7 @@ const Modal = () => {
             <Button
               onClick={() => {
                 closeModal();
-                setArrowButtonDisabled("up");
+                setArrowButtonDisabled(ScrollDirection.UP);
               }}
               sx={{
                 position: "fixed",
@@ -106,7 +109,6 @@ const Modal = () => {
               />
             </Button>
             <Box
-              // className="LEFT-BOX"
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -126,13 +128,13 @@ const Modal = () => {
                 }}
               >
                 <Button
-                  onClick={() => scroll("up")}
+                  onClick={() => scroll(ScrollDirection.UP)}
                   sx={{
                     padding: 0,
                     minWidth: "auto",
                     marginBottom: "1rem",
                   }}
-                  disabled={arrowButtonDisabled === "up"}
+                  disabled={arrowButtonDisabled === ScrollDirection.UP}
                 >
                   <Box
                     component="img"
@@ -149,12 +151,12 @@ const Modal = () => {
                   />
                 </Button>
                 <Button
-                  onClick={() => scroll("down")}
+                  onClick={() => scroll(ScrollDirection.DOWN)}
                   sx={{
                     padding: 0,
                     minWidth: "auto",
                   }}
-                  disabled={arrowButtonDisabled === "down"}
+                  disabled={arrowButtonDisabled === ScrollDirection.DOWN}
                 >
                   <Box
                     component="img"
@@ -163,7 +165,7 @@ const Modal = () => {
                     sx={{
                       width: "2rem",
                       filter:
-                        arrowButtonDisabled === "down"
+                        arrowButtonDisabled === ScrollDirection.DOWN
                           ? "invert(95%) sepia(0%) saturate(0%) hue-rotate(207deg) brightness(200%) contrast(20%)"
                           : "none",
                     }}
@@ -171,7 +173,6 @@ const Modal = () => {
                 </Button>
               </Box>
               <Card
-                // className="IMAGE-CONTAINER"
                 sx={{
                   display: "flex",
                   justifyContent: "center",
