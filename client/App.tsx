@@ -8,7 +8,7 @@ import { FeedItem } from "./types";
 function App() {
   const [feedData, setFeedData] = useState<FeedItem[]>([]);
 
-  const fetchData = () => {
+  const fetchData = async () => {
     return fetch(
       `http://localhost:4000/feed?START=${feedData.length}&PAGE_SIZE=${5}`
     ).then((response) => response.json());
